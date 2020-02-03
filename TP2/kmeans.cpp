@@ -39,7 +39,7 @@ Image<uint8_t> create_seuillage(const Image<uint8_t> &image, int seuil)
     }
     return image2;
 }
-int Mean(std::vector<int> &histo,int deb,int fin){
+int Mean(std::vector<int> &histo,int deb,int fin, int N){
     float Pbg = 0;
     float Mbg = 0;
     for (int j=deb;j<fin+1;j++){
@@ -55,13 +55,14 @@ int kmeans(const Image<uint8_t> &image, int k)
 {
     std::vector<int> histo = std::vector<int> (256,0);
     compute_histo(image,histo);
+    int N = image.getSize();
     int s_new = 128;
     int seuil = 128;
     do{
         seuil = s_new;
         s_new = 0;
         for (int h = 0; h<k;h++) {
-            s_new += Mean(histo, seuil * h, seuil * (h + 1));
+            s_new += Mean(histo, seuil * h, seuil * (h + 1),N);
         }
         s_new = s_new/k;
     }while (s_new != seuil)
