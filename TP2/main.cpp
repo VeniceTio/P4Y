@@ -40,52 +40,18 @@ Image<uint8_t> create_seuillage(const Image<uint8_t> &image, int seuil)
     return image2;
 }
 
-int otsu(const Image<uint8_t> &image){
-    std::vector<int> histo = compute_histo(image);
-    int N = image.getSize();
-    float Pbg,Pfg, Mbg, Mfg;
-    float Var;
-    float maxSeuil=0;
-    int bestSeuil;
-    for (int i = 0;i<256;i++){
-        Pbg = 0;
-        Pfg = 0;
-        Mbg = 0;
-        Mfg = 0;
-        for (int j=0;j<i+1;i++){
-            Pbg += histo[j];
-            Mbg += j * histo[j];
-        }
-        Pbg = Pbg/N;
-        for (int k=i+1;k<256;k++;){
-            Pfg += histo[k];
-            Mfg +=k * histo[k];
-        }
-        Pfg = Pfg/N;
-        if(Pbg+Pfg != 1){
-            throw new illegalException;
-        }
-        Var = Pbg * Pfg * ((Mbg-Mfg)*(Mbg-Mfg))
-        if(Var > maxSeuil){
-            maxSeuil = Var;
-            bestSeuil = i;
-        }
-    }
-    return bestSeuil;
-}
-
 int main(int argc, const char * argv[]) {
     if(argc !=3) {
         std::cout << "Usage : " << argv[0] << " <input.pgm> <output.pgm> \n";
         exit(EXIT_FAILURE);
     }
 
-    Image<uint8_t> image=readPGM(argv[1]);
-    print_info(image);
-    //compute_histo(image);
-    writePGM(create_seuillage(image,otsu(image)),argv[2]);
-    Image<uint8_t> image3=readPGM("normalizeR.pgm");
-    writePGM(equalize(image3),"equalizeR.pgm");
+//    Image<uint8_t> image=readPGM(argv[1]);
+//    print_info(image);
+//    compute_histo(image);
+//    writePGM(create_seuillage(image,otsu(image)),argv[2]);
+//    Image<uint8_t> image3=readPGM("normalizeR.pgm");
+//    writePGM(equalize(image3),"equalizeR.pgm");
     
 
     return 0;

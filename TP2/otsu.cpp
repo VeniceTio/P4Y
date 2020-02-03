@@ -20,13 +20,11 @@ void print_info(const Image<uint8_t> &image)
     std::cout << " Moyenne de gris : " << (sommePx/image.getSize()) << "\n";
 }
 
-std::vector<int> compute_histo(const Image<uint8_t> &image)
+void compute_histo(const Image<uint8_t> &image, std::vector<int> &histo)
 {
-    std::vector<int> histo = std::vector<int> (256,0);
     for (int i = 0;i<image.getSize();i++){
         histo[image(i)]++;
     }
-    return histo;
 }
 Image<uint8_t> create_seuillage(const Image<uint8_t> &image, int seuil)
 {
@@ -41,31 +39,42 @@ Image<uint8_t> create_seuillage(const Image<uint8_t> &image, int seuil)
 }
 
 int otsu(const Image<uint8_t> &image){
-    std::vector<int> histo = compute_histo(image);
+    std::vector<int> histo = std::vector<int> (256,0);
+    std::cout << "Etape 1 : \n";
+    compute_histo(image,histo);
+    std::cout << "Etape 1 : \n";
     int N = image.getSize();
     float Pbg,Pfg, Mbg, Mfg;
     float Var;
-    float maxSeuil=0;
-    int bestSeuil;
+    float maxSeuil= 0;
+    int bestSeuil = 0;
+    std::cout << "Etape 3 : \n";
     for (int i = 0;i<256;i++){
         Pbg = 0;
         Pfg = 0;
         Mbg = 0;
         Mfg = 0;
-        for (int j=0;j<i+1;i++){
+        std::cout << "Etape 4' : \n";
+        for (int j=0;j<i+1;j++){
+//            std::cout << "Etape : " << j << "\n";
             Pbg += histo[j];
             Mbg += j * histo[j];
         }
         Pbg = Pbg/N;
-        for (int k=i+1;k<256;k++;){
+        Mbg = Mbg/(N*Pbg);
+        std::cout << "Pbg : " << Pbg << "Mbg : " << Mbg << "\n";
+        for (int k=i+1;k<256;k++){
             Pfg += histo[k];
             Mfg +=k * histo[k];
         }
         Pfg = Pfg/N;
+        Mfg = Mfg/(N*Pfg);
+        std::cout << "Pfg : " << Pbg << "Mfg : " << Mbg << "\n";
         if(Pbg+Pfg != 1){
-            throw new illegalException;
+            std::cout << "Erreur de calcule !";
         }
-        Var = Pbg * Pfg * ((Mbg-Mfg)*(Mbg-Mfg))
+        Var = Pbg * Pfg * ((Mbg-Mfg)*(Mbg-Mfg));
+        std::cout << "Var : " << Var;
         if(Var > maxSeuil){
             maxSeuil = Var;
             bestSeuil = i;
