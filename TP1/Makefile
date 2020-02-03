@@ -9,7 +9,7 @@ fileio.o: fileio.cpp
 main: main.o fileio.o
 	$(CC) $(CPPFLAGS) main.o fileio.o -o main
 
-main.o: main.cpp 
+main.o: main.cpp
 	$(CC) $(CPPFLAGS) -c main.cpp
 
 compute_histo: compute_histo.o fileio.o
