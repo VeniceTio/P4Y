@@ -79,14 +79,10 @@ int main(int argc, const char * argv[]) {
         std::cout << "Usage : " << argv[0] << " <input.pgm> <output.pgm> \n";
         exit(EXIT_FAILURE);
     }
-
     Image<uint8_t> image=readPGM(argv[1]);
     print_info(image);
-    //compute_histo(image);
-    writePGM(create_seuillage(image,otsu(image)),argv[2]);
-    Image<uint8_t> image3=readPGM("normalizeR.pgm");
-    writePGM(equalize(image3),"equalizeR.pgm");
-    
-
+    int seuil = otsu(image);
+    std::cout << " Seuil optimal : " << seuil;
+    writePGM(create_seuillage(image,seuil),argv[2]);
     return 0;
 }

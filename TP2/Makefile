@@ -1,7 +1,7 @@
 CC = g++
 CPPFLAGS = -Wall -Wextra -O3 -std=c++11
 
-all: main compute_histo degrade equalize negate normalize
+all: main compute_histo otsu
 
 fileio.o: fileio.cpp 
 	$(CC) $(CPPFLAGS) -c fileio.cpp
@@ -17,6 +17,12 @@ compute_histo: compute_histo.o fileio.o
 
 compute_histo.o: compute_histo.cpp 
 	$(CC) $(CPPFLAGS) -c compute_histo.cpp
+
+otsu: otsu.o fileio.o
+	$(CC) $(CPPFLAGS) otsu.o fileio.o -o otsu
+
+otsu.o: otsu.cpp
+	$(CC) $(CPPFLAGS) -c otsu.cpp
 
 clean:
 	rm *.o
