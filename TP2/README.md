@@ -12,63 +12,71 @@ L'algorithme d'Otsu permet de calculer un seuil de manière automatique dans le 
 
 Soit une image $`f:E \rightarrow V`$ et un seuil $`s`$. On considère les deux classes suivantes :
 
-- l'ensemble des pixels qui ont une valeur supérieure au seuil, ou *points objet* $`X_o=\{p \in E \mid f(p)\geq s) \}`$
-- l'ensemble des pixels qui ont une valeur inférieure au seuil ou *points fond* $`X_f=\{p \in E \mid f(p) < s) \}`$.
+- l'ensemble des pixels qui ont une valeur supérieure au seuil, ou *points objet*, ou encore *foreground*, en anglais, soit $`X_{fg}=\{p \in E \mid f(p)\geq s) \}`$
+- l'ensemble des pixels qui ont une valeur inférieure au seuil ou *points fond*, ou *background*, soit $`X_{bg}=\{p \in E \mid f(p) < s) \}`$.
 
 Image originale |      Image seuillée (s=110)
 :--------------:|:-----------------:
 ![](images/grumpy.png)|![](images/grumpy-thres.png)
 
-En blanc : les points objet $`X_o`$ 
-En noir : points fond $`X_f`$.
+En blanc : les points de $`X_{fg}`$, en noir : ceux de $`X_{bg}`$.
 
-
-On se donne une mesure d'homogénéité pour une classe : celle-ci peut se fonder par exemple sur la variance des valeurs des points : $`\sigma^2_o`$ pour la variance des points objet, $`\sigma^2_f`$ pour la variance des points fond. On appelle cette mesure de variance pour une classe donnée la *variance intra-classe*. Plus les points d'une classe sont homogènes, plus la variance est petite (pour une classe parfaitement homogène, la variance est nulle).
-
-Le principe de l'algorithme d'Otsu est de choisir le seuil qui permet d'obtenir les classes les plus homogènes possibles au sens de la variance intra-classe.
-Le seuil calculé est celui qui minimise la  variance intra-classe totale (*within class variance*) définie par :
+Une mesure possible de l'homogénéité d'un ensemble de valeurs (les intensités des pixels d'une image par exemple) est la *variance* définie (comme d'habitude !) comme l'écart quadratique moyen à la moyenne des valeurs considérées. Ici, par exemple, la variance des intensités de l'image $`f`$ est 
 
 ```math
-\sigma^2_w=w_f \sigma^2_f+w_o\sigma^2_o,
+\sigma^2 =\frac{1}{N}\sum_{x\in E} (f(x)-\mu)^2,
+```
+où $`N`$ est le nombre de pixels de l'image et $`\mu`$ est la valeur moyenne de l'intensité. 
+La variance est d'autant plus faible que l'intensité des pixels de l'image est homogène, c'est-à-dire peu éloignée de la moyenne (le cas d'une variance nulle correspondant à une intensité constante).
+Noter que cette définition ne diffère pas de celle de la variance d'une variable aléatoire : on considère simplement l'intensité d'un pixel comme une variable aléatoire (à valeur entière comprise entre 0 et 255) dont la distribution est donnée par l'histogramme de l'image.
+
+Si l'ensemble des points est séparé en deux classes (*foreground* et *background*), on peut calculer l'effectif $`N_C`$ de chaque classe $`C`$, ainsi que la moyenne des intensités pour chaque classe
+```math
+\mu_C=\frac{1}{N_C}\sum_{x\in C}f(x),
+```
+et bien sûr la variance interne à chaque classe. 
+Dans le cas qui nous intéresse ici on obtient donc les deux variances
+
+```math
+\sigma^2_{fg}=\frac{1}{N_{fg}}\sum_{x\in X_{fg}}(f(x)-\mu_{fg})^2 
+```
+et
+
+```math
+\sigma^2_{bg}=\frac{1}{N_{bg}}\sum_{x\in X_{bg}}(f(x)-\mu_{bg})^2
 ```
 
-où :
+À partir de ces variances calculées pour chaque classe, on définit pour l'image totale la *variance intra-classe* (*within class variance*) comme une moyenne des variances internes à chaque classe, pondérée par la proportion des points de l'image appartenant à la classe donnée (formellement $`p_C= N_C/N`$ pour la classe $`C`$): 
 
-- $`w_f`$ est la proportion de points fond : $`w_f=\mid X_f \mid/N`$
-- $`w_o`$ est la proportion de points objet : $`w_o=\mid X_o \mid/N`$
-- $`N`$ est le nombre de points de l'image : $`N=\mid E \mid`$
-- $`\sigma^2_f`$ est la variance  des points fond : $`\sigma^2_f=\frac{1}{N}\sum_{x\in X_f}(f(x)-\mu_f)^2`$
-- $`\sigma^2_o`$ est la variance des points objet : $`\sigma^2_o=\frac{1}{N}\sum_{x\in X_o}(f(x)-\mu_o)^2`$
-- $`\mu_f`$ est la moyenne des points fond : $`\mu_f=\frac{1}{N}\sum_{x\in X_f}f(x)`$
-- $`\mu_o`$ est la moyenne des points objet : $`\mu_o=\frac{1}{N}\sum_{x\in X_o}f(x)`$
+```math
+\sigma^2_w = p_{bg}\sigma^2_{bg}+p_{fg}\sigma^2_{fg} ,
+```
+Le *seuil d'Otsu* est la valeur de seuillage qui minimise cette variance intra-classe.
 
-On peut montrer que le seuil optimal d'Otsu maximise également la variance inter-classe (*between class variance*) définie par :
+La variance inter-classe (*between class variance*) est définie par la différence entre la variance totale de l'image et la variance intra-classe, autrement dit :
 
 ```math
 \sigma^2_b=\sigma^2-\sigma^2_w
 ```
+Il est clair que le seuil d'Otsu est également caractérisé par la propriété qu'il maximise cette variance inter-classe. (Intuitivement, maximiser la variance inter-classe revient à choisir un seuil qui maximise la dissimilarité entre les deux classes.) 
 
-avec : $`\sigma^2`$  la variance totale de l'image.
-
-Finalement  l'expression de  $`\sigma^2_b`$ se réduit à :
+Un calcul montre par ailleurs que celle-ci est aussi égale à 
 
 ```math
-\sigma^2_b=w_f w_o (\mu_f-\mu_o)^2
+\sigma^2_b=p_{bg}p_{fg}(\mu_{bg}-\mu_{fg})^2.
 ```
-
-Intuitivement, maximiser la variance inter-classe revient à choisir un seuil qui maximise la dissimilarité entre les deux classes.
+Cette expression est particulièrement intéressante dans l'objectif de déterminer un seuil optimal, en ce qu'elle économise le calcul explicite des variances.
 
 #### Implémentation de l'algorithme 
 
 L'implémentation de l'algorithme d'Otsu peut s'appuyer soit sur la minimisation de la variance intra-classe soit sur la maximisation de la variance inter-classe. On choisira plutôt la seconde formulation qui permet d'éviter le calcul explicite des variances.
-
-L'histogramme de l'image contient toute l'information nécessaire au calcul des différentes variables intermédiaires.
+On remarquera notamment que'histogramme de l'image contient toute l'information nécessaire au calcul efficace des grandeurs utiles.
 
 L'algorithme se formule donc de la manière suivante :
 
 1. Calcul de l'histogramme
 2. Pour tous les seuils `s` possibles :
-   1. Mettre à jour $`w_o,w_f,\mu_o,\mu_f`$ en utilisant l'histogramme
+   1. Mettre à jour $`p_{bg}, p_{fg}, \mu_{bg}, \mu_{fg}`$ en utilisant l'histogramme
    2. Calculer $`\sigma^2_b`$
 3. Retourner le seuil $`s`$ qui maximise $`\sigma^2_b`$
 
