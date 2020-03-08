@@ -47,7 +47,7 @@ Cette grandeur permet en particulier de mesurer l'écart entre une image I et un
  
 ## Tests
 
-Générer les images suivantes à partir de l'image *barbara.pgm* : 
+Générer les images suivantes à partir de l'image *grumpy.pgm* : 
 
 - Bruit impulsionnel de 15% ;
 - Bruit impulsionnel de 40% ;
