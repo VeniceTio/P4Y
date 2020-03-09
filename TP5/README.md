@@ -27,7 +27,7 @@ Quelques conseils :
 
 ### Bruit impulsionnel
 
-Écrire une fonction permettant d'ajouter du bruit impulsionnel (ou *poivre et sel*) à une image. La probabilité $p$ qu'un pixel
+Écrire une fonction permettant d'ajouter du bruit impulsionnel (ou *poivre et sel*) à une image. La probabilité $`p`$ qu'un pixel
 de l'image soit corrompu, avec $`0\leq p \leq 1`$, sera passée en paramètre. 
 Chaque pixel corrompu peut être blanc (valeur 255) ou noir (valeur 0) avec une probabilité 0.5 (une chance sur deux).
 Vous pourrez vous appuyer sur la fonction `rand()`  ou utiliser la classe `std::uniform_int_distribution`.
