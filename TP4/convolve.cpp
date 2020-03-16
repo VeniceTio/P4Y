@@ -10,8 +10,8 @@
 #include <cmath>
 #include <vector>
 #include <iostream>
-#include "image.h"
-#include "fileio.h"
+#include "../TP4/image.h"
+#include "../TP4/fileio.h"
 
 void print_info(const Image<uint8_t> &image)
 {
@@ -43,7 +43,7 @@ Image<uint8_t> convolve(const Image<uint8_t> &image, const Image<double> &mask){
             for (int xm = x-(middleMask-1); xm < x+rightBord+1; xm++) {
                 for (int ym = y-(middleMask-1); ym < y+rightBord+1; ym++) {
                     index++;
-                    if ( xm>-1 || xm< image.getDx()-1 || ym>-1 || ym<image.getDy()-1){
+                    if ( xm>-1 && xm< image.getDx()-1 && ym>-1 && ym<image.getDy()-1){
                         pixel += image(xm,ym)*mask(index);
                     }
                 }
