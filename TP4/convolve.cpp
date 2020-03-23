@@ -70,7 +70,7 @@ Image<double> gaussienMask(float sigma){
     for(int x = -(n/2); x<(n/2)+1;x++){
         for(int y = -(n/2); y<(n/2)+1;y++){
             mask(xm) = exp(-(x*x+y*y)/(2*sigma*sigma));
-            std::cout << " pixel (" << x << ";" << y << ") : " << mask(xm) << "\n";
+//            std::cout << " pixel (" << x << ";" << y << ") : " << mask(xm) << "\n";
             poid += mask(xm);
             xm++;
         }
@@ -78,11 +78,11 @@ Image<double> gaussienMask(float sigma){
     for(int i = 0; i< mask.getSize()-1;i++){
         mask(i)=mask(i)/poid;
     }
-    poid = 0;
-    for(int i = 0; i< mask.getSize()-1;i++){
-        poid += mask(i);
-    }
-    std::cout << " poid : " << poid << "\n";
+//    poid = 0;
+//    for(int i = 0; i< mask.getSize()-1;i++){
+//        poid += mask(i);
+//    }
+//    std::cout << " poid : " << poid << "\n";
     return mask;
 }
 

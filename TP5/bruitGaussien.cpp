@@ -15,35 +15,32 @@
 #include "../TP4/image.h"
 #include "../TP4/fileio.h"
 
-void print_info(const Image<uint8_t> &image)
-{
-    std::cout << " Taille : " << image.getDx() << " x " << image.getDy() << "\n";
-    std::cout << " Nombre de pixel : " << image.getSize() << "\n";
-    std::cout << " Val min : " << unsigned(image.getMin()) << "\n";
-    std::cout << " Val max : " << unsigned(image.getMax()) << "\n";
-    int sommePx = 0;
-    for (int i=0;i<image.getSize();i++){
-        sommePx += image(i);
-    }
-    std::cout << " Somme des pixels : " << sommePx << "\n";
-    std::cout << " Moyenne de gris : " << (sommePx/image.getSize()) << "\n";
-}
-
+/**
+ * la fonction bruitGaussien va plus ou moins aleterer l'image en ajoutant une valeur au pixel. La valeur ajouté est aléatoire
+ * et est répartie celon la loi normal uniform. On peut lancer la fonction de la manière suivante.
+ *
+ * params:
+ *  - image de type Image<uint8_t> image à traiter
+ *  - sigma de type double correspond à l'ecart type de la loi normal'
+ *
+ *  return :
+ *  image2 de type Image<uint8_t> image resultante de la modification
+ */
 Image<uint8_t> bruitGaussien(const Image<uint8_t> &image, const double sigma){
     Image<uint8_t> image2(image);
     std::default_random_engine gen;
     std::normal_distribution<double> dist(0,sigma);
     double pixel;
     for(int y=0;y<image.getDy();y++) {
-        for (int x = 0; x < image.getDx(); x++) {
-            pixel = image(x,y) + dist(gen);
-            if (pixel<0){
-                pixel = 0;
+        for (int x = 0; x < image.getDx(); x++) {   // parcours des pixels celon leur coordonnée (x;y)
+            pixel = image(x,y) + dist(gen);         // ajout d'une valeur parasyte defini celon la loi normal
+            if (pixel<0){                           // ^
+                pixel = 0;                          // |
             }
             else if (pixel > 255){
-                pixel = 255;
-            }
-            image2(x,y) = pixel;
+                pixel = 255;                        // verifier qu'une valeur est bien entre 255 et 0
+            }                                       // |
+            image2(x,y) = pixel;                    // v
         }
     }
     return image2;
@@ -54,10 +51,7 @@ int main(int argc, const char * argv[]) {
         std::cout << "Usage : " << argv[0] << " <input.pgm> <output.pgm> <n>\n";
         exit(EXIT_FAILURE);
     }
-    //Image<double> mask3(gaussienMask(atof(argv[3])));
-
     Image<uint8_t> image=readPGM(argv[1]);
-    print_info(image);
     writePGM(bruitGaussien(image, atof(argv[3])), argv[2]);
     return 0;
 }

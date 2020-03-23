@@ -13,20 +13,17 @@
 #include "../TP4/image.h"
 #include "../TP4/fileio.h"
 
-void print_info(const Image<uint8_t> &image)
-{
-    std::cout << " Taille : " << image.getDx() << " x " << image.getDy() << "\n";
-    std::cout << " Nombre de pixel : " << image.getSize() << "\n";
-    std::cout << " Val min : " << unsigned(image.getMin()) << "\n";
-    std::cout << " Val max : " << unsigned(image.getMax()) << "\n";
-    int sommePx = 0;
-    for (int i=0;i<image.getSize();i++){
-        sommePx += image(i);
-    }
-    std::cout << " Somme des pixels : " << sommePx << "\n";
-    std::cout << " Moyenne de gris : " << (sommePx/image.getSize()) << "\n";
-}
-
+/**
+ * la fonction bruitPulsion bruite les pixel d'une image donnée en parmametre celon un pourcentage pré-defini.
+ * Un pixel bruité soit noir soit blanc
+ *
+ * params:
+ *  - image de type Image<uint8_t> image à traiter
+ *  - p de type float correspond à la probabilité qu'un pixel soit bruité
+ *
+ *  return :
+ *  image2 de type Image<uint8_t> image resultante de la modification
+ */
 Image<uint8_t> bruitPulsion(const Image<uint8_t> &image, const float p){
     Image<uint8_t> image2(image);
     int pixel;
@@ -49,10 +46,7 @@ int main(int argc, const char * argv[]) {
         std::cout << "Usage : " << argv[0] << " <input.pgm> <output.pgm> <n>\n";
         exit(EXIT_FAILURE);
     }
-    //Image<double> mask3(gaussienMask(atof(argv[3])));
-
     Image<uint8_t> image=readPGM(argv[1]);
-    print_info(image);
     writePGM(bruitPulsion(image, atof(argv[3])), argv[2]);
     return 0;
 }

@@ -15,25 +15,20 @@
 #include "../TP4/image.h"
 #include "../TP4/fileio.h"
 
-void print_info(const Image<uint8_t> &image)
-{
-    std::cout << " Taille : " << image.getDx() << " x " << image.getDy() << "\n";
-    std::cout << " Nombre de pixel : " << image.getSize() << "\n";
-    std::cout << " Val min : " << unsigned(image.getMin()) << "\n";
-    std::cout << " Val max : " << unsigned(image.getMax()) << "\n";
-    int sommePx = 0;
-    for (int i=0;i<image.getSize();i++){
-        sommePx += image(i);
-    }
-    std::cout << " Somme des pixels : " << sommePx << "\n";
-    std::cout << " Moyenne de gris : " << (sommePx/image.getSize()) << "\n";
-}
-
+/**
+ * la fonction MSE est un outil de mesure renvoyant un double indiquant la dissimilarité entre 2 image
+ * params :
+ *  - image type Image<uint8_t> : premiere image à comparé
+ *  - image2 type Image<uint8_t> : deuxieme image à comparé
+ *
+ *  return :
+ *      - ... type double : indicateur de dissimilarité des 2 images
+ */
 double MSE(const Image<uint8_t> &image, const Image<uint8_t> &imagePrime){
     double valeur = 0;
     for(int y=0;y<image.getDy();y++) {
-        for (int x = 0; x < image.getDx(); x++) {
-            valeur += ((image(x,y) - imagePrime(x,y))*(image(x,y) - imagePrime(x,y)));
+        for (int x = 0; x < image.getDx(); x++) {  //double boucle permettant de parcourrir les image avec les coordonnées (x;y)
+            valeur += ((image(x,y) - imagePrime(x,y))*(image(x,y) - imagePrime(x,y)));  //application de la formule
         }
     }
     return valeur/image.getSize();
@@ -44,11 +39,8 @@ int main(int argc, const char * argv[]) {
         std::cout << "Usage : " << argv[0] << " <input.pgm> <output.pgm>\n";
         exit(EXIT_FAILURE);
     }
-    //Image<double> mask3(gaussienMask(atof(argv[3])));
-
     Image<uint8_t> image=readPGM(argv[1]);
     Image<uint8_t> image2=readPGM(argv[2]);
-    print_info(image);
-    std::cout << "MSE : " << MSE(image, image2);
+    std::cout << "MSE : " << MSE(image, image2) << "\n";
     return 0;
 }
