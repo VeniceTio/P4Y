@@ -30,12 +30,11 @@ void print_info(const Image<uint8_t> &image)
 Image<uint8_t> convolve(const Image<uint8_t> &image, const Image<double> &mask){
     Image<uint8_t> image2(image);
     Image<double> maskVar(mask);
-    double pixel = 0;
+    float pixel = 0;
     int index;
     int dimMaskConv = mask.getDx();
     int middleMask = dimMaskConv/2;
     int rightBord = dimMaskConv-middleMask;
-    int leftBord = middleMask-1;
     for(int x=0;x<image.getDx();x++) {
         for (int y = 0; y < image.getDy(); y++) {
             index=-1;
@@ -44,16 +43,17 @@ Image<uint8_t> convolve(const Image<uint8_t> &image, const Image<double> &mask){
                 for (int ym = y-(middleMask-1); ym < y+rightBord+1; ym++) {
                     index++;
                     if ( xm>-1 && xm< image.getDx()-1 && ym>-1 && ym<image.getDy()-1){
+
                         pixel += image(xm,ym)*mask(index);
                     }
                 }
             }
-            if (pixel<0){
+            if (pixel<0.){
                 image2(x,y) = 0;
-            } else if (pixel > 255){
+            } else if (pixel > 255.){
                 image2(x,y) = 255;
             } else {
-                image2(x,y) = pixel;
+                image2(x,y) = (uint8_t)pixel;
             }
         }
     }
@@ -97,11 +97,15 @@ int main(int argc, const char * argv[]) {
 //        exit(EXIT_FAILURE);
 //    }
     std::vector<double> data = {
-            1./9,1./9,1./9,
-            1./9,1./9,1./9,
-            1./9,1./9,1./9
+            1./49.,1./49.,1./49.,1./49.,1./49.,1./49.,1./49.,
+            1./49.,1./49.,1./49.,1./49.,1./49.,1./49.,1./49.,
+            1./49.,1./49.,1./49.,1./49.,1./49.,1./49.,1./49.,
+            1./49.,1./49.,1./49.,1./49.,1./49.,1./49.,1./49.,
+            1./49.,1./49.,1./49.,1./49.,1./49.,1./49.,1./49.,
+            1./49.,1./49.,1./49.,1./49.,1./49.,1./49.,1./49.,
+            1./49.,1./49.,1./49.,1./49.,1./49.,1./49.,1./49.,
     };
-    Image<double> mask1(3,3,data);
+    Image<double> mask1(7,7,data);
 
     std::vector<double> data2 = {
             1./16,2./16,1./16,
