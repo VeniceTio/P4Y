@@ -1,8 +1,8 @@
-# Compte rendue P4Y
+# Compte rendu P4Y
 
 
-Le but de ce TP etait de concevoir, verifier et comparer 2 systeme de bruitage ainsi 
-different algorythme pour les debruiter.
+Le but de ce TP était de concevoir, verifier et comparer 2 système de bruitage ainsi 
+different algorithme pour les debruiter.
 
 ## Modélisation du bruit
 
