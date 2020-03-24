@@ -62,7 +62,7 @@ Une fois toutes les images créée, on peut donc constituer le tableau suivant.
 |grumpyGaus15        |  ![](./ImageResult/png/grumpyGaus15.png)      |![](./ImageResult/png/grumpyGaus15Median3.png) |![](./ImageResult/png/grumpyGaus15Median7.png)|![](./ImageResult/png/grumpyGaus15Moy3.png) |![](./ImageResult/png/grumpyGaus15Moy7.png) |![](./ImageResult/png/grumpyGaus15GausFilter1.png) |![](./ImageResult/png/grumpyGaus15GausFilter2.png)
 |grumpyGaus30        |  ![](./ImageResult/png/grumpyGaus30.png)      |![](./ImageResult/png/grumpyGaus30Median3.png) |![](./ImageResult/png/grumpyGaus30Median7.png)|![](./ImageResult/png/grumpyGaus30Moy3.png) |![](./ImageResult/png/grumpyGaus30Moy7.png) |![](./ImageResult/png/grumpyGaus30GausFilter1.png) |![](./ImageResult/png/grumpyGaus30GausFilter2.png)
 
-Nous pouvons maintenant nous servir de la fonction MeanSuareError pour connaitre les effet des different filtre sur une 
+Nous pouvons maintenant nous servir de la fonction MeanSquareError pour connaitre les effet des different filtre sur une 
 image bruité par rapport à l'image initial.
 
 
