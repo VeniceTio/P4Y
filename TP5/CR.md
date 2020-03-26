@@ -77,3 +77,19 @@ image bruité par rapport à l'image initial.
 Ainsi on peut donc déterminer que celon la mesure du MSE le filtre median de 7 par 7 est plutôt enclain à restituer une image proche de l'origine.
 Cependant ce choix de filtre pour le débruitage fait perdre en netteté à l'image et donne un effet aquarel. Le filtre moyenneur et gausien
 
+*Note : ce rapport est très difficile à lire du fait du très grand nombre de fautes d'orthographe et de grammaire.*
+
+- il manque des s
+- grand nombre de fautes dans les accords
+- il manque beaucoup d'accents
+- aleterer -> altérer
+- medien -> médian
+- celon ->selon
+- enclain -> enclin
+- loi normal -> loi normale
+ - ...
+
+
+*L'objectif du compte-rendu était d'expliquer de tester et d'illustrer chaque opération avec différents paramètres afin de s'assurer de la cohérence des résultats. Ceci manque dans votre rapport.
+Enfin, il me semble qu'il y a des problèmes de bornes dans votre filtre médian.
+Pour les tests, on trouve en principe des résultats différents selon le type de bruit. Avec un bruit impulsionnel un filtre médian est meilleur alors qu'avec un bruit gaussien, un filtre gaussien est plus efficace.*
